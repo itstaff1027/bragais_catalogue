@@ -36,7 +36,7 @@ const Trigger = ({ children }) => {
 };
 
 const Content = ({
-    align = 'right',
+    align = 'left',
     width = '48',
     contentClasses = 'py-1 bg-white',
     children,
@@ -48,6 +48,9 @@ const Content = ({
     if (align === 'left') {
         alignmentClasses = 'ltr:origin-top-left rtl:origin-top-right start-0';
     } else if (align === 'right') {
+        alignmentClasses = 'ltr:origin-top-right rtl:origin-top-left end-0';
+    }
+    else if (align == 'top'){
         alignmentClasses = 'ltr:origin-top-right rtl:origin-top-left end-0';
     }
 
@@ -69,7 +72,7 @@ const Content = ({
                 leaveTo="opacity-0 scale-95"
             >
                 <div
-                    className={`absolute z-50 mt-2 rounded-md shadow-lg ${alignmentClasses} ${widthClasses}`}
+                    className={`absolute z-50 mb-2 rounded-md shadow-lg ${alignmentClasses} ${widthClasses}`}
                     onClick={() => setOpen(false)}
                 >
                     <div
