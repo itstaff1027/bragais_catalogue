@@ -30,7 +30,7 @@ export default function Registers() {
                 </h2>
             }
         >
-            <Head title="Register" />
+            <Head title="Create Users" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
