@@ -1,4 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
+import ApplicationLogo from '@/Components/ApplicationLogo';
+import Gallery from '@/Pages/Gallery/Page';
+import HowToOrder from '@/Pages/Footer/HowToOrder';
 
 export default function Welcome({ auth, laravelVersion, phpVersion }) {
     const handleImageError = () => {
@@ -14,12 +17,113 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
 
     return (
         <>
-            <Head title="Welcome" />
-            <div className="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
+            <Head title="JOJO BRAGAIS" />
+            <nav className="nav_container flex flex-1 justify-end">
+                <Link className="absolute items-center justify-center flex w-full h-24" href="/">
+                    <ApplicationLogo src="/assets/jojobragaiswhite.png" className="block h-16 w-auto fill-current text-gray-800" />
+                </Link>
+                {auth.user ? (
+                    <Link
+                        href={route('dashboard')}
+                        className="z-50 rounded-md px-8 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                    >
+                        Dashboard
+                    </Link>
+                ) : (
+                    <div className="hidden">
+                        {/* <Link
+                            href={route('login')}
+                            className="z-50 rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                        >
+                            Log in
+                        </Link>
+                        <Link
+                            href={route('registers')}
+                            className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                        >
+                            Register
+                        </Link> */}
+                    </div>
+                )}
+            </nav>
+            <div className="container min-w-full">
+                <div className="slides">
+                    <div className="rounded-xl w-full h-auto">
+                        <img src="/assets/muph2024.jpg" className="rounded-xl w-full" layout="fill" objectFit="cover" alt="highlights" lazy />
+                    </div>
+                </div>
+
+                <div className=" w-full p-8 h-auto">
+                    <Gallery />
+                </div>
+
+                
+            
+                <div className="gallery_container border p-8 ">
+                    <div className="rounded-xl shadow-xl shadow-slate-600/100 m-4">
+                       
+                    </div>
+
+                    <div className="image-container m-8 relative w-full h-auto"> {/* Adjust height as needed */}
+                        <img
+                            src="/assets/group.jpg"
+                            layout="fill"
+                            objectFit="cover"
+                            className="rounded-xl"
+                            alt="highlights"
+                            lazy
+                        />
+                    </div>
+                    
+                    <div className="w-full flex flex-col ">
+                        <div className="text-xl pt-16 pb-16 text-white">
+                            <h1 className="underline">WOMENS</h1>
+                        </div>
+
+                        {/* Add `min-w-full` to ensure the container respects the full width */}
+                        <div className="w-full overflow-x-auto">
+                            {/* Set a large width for the inner container */}
+                            <div className="flex space-x-2 min-w-max"> 
+                            <div className="h-[500px] w-[360px] bg-white"></div>
+                            <div className="h-[500px] w-[360px] bg-white"></div>
+                            <div className="h-[500px] w-[360px] bg-white"></div>
+                            <div className="h-[500px] w-[360px] bg-white"></div>
+                            <div className="h-[500px] w-[360px] bg-white"></div>
+                            <div className="h-[500px] w-[360px] bg-white"></div>
+                            </div>
+                        </div>   
+                    </div>
+
+                    <div className="w-full flex flex-col">
+                        <div className="text-xl pt-16 pb-16 text-white">
+                            <h1 className="underline">MENS</h1>
+                        </div>
+                        <div className="w-full overflow-x-auto">
+                            <div className="flex space-x-2 min-w-max"> 
+                            <div className="h-[500px] w-[360px] bg-white"></div>
+                            <div className="h-[500px] w-[360px] bg-white"></div>
+                            <div className="h-[500px] w-[360px] bg-white"></div>
+                            <div className="h-[500px] w-[360px] bg-white"></div>
+                            <div className="h-[500px] w-[360px] bg-white"></div>
+                            <div className="h-[500px] w-[360px] bg-white"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="p-4 flex bg-white w-full justify-center items-center text-[#020E29] shadow-xl shadow-slate-600/50 z-10">
+                    <h1 className="text-xl font-bold">How to Order</h1>
+                </div>
+                
+                <div className="footer_container p-16 bg-white text-black">
+                    <HowToOrder /> 
+                </div>
+            </div>
+            {/* <div className="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
                 <img
                     id="background"
                     className="absolute -left-20 top-0 max-w-[877px]"
-                    src="https://laravel.com/assets/img/welcome/background.svg"
+                    src="/assets/jojobragaiswhite.png"
                 />
                 <div className="relative flex min-h-screen flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
                     <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
@@ -37,31 +141,6 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                     />
                                 </svg>
                             </div>
-                            <nav className="-mx-3 flex flex-1 justify-end">
-                                {auth.user ? (
-                                    <Link
-                                        href={route('dashboard')}
-                                        className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                    >
-                                        Dashboard
-                                    </Link>
-                                ) : (
-                                    <>
-                                        <Link
-                                            href={route('login')}
-                                            className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                        >
-                                            Log in
-                                        </Link>
-                                        <Link
-                                            href={route('registers')}
-                                            className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                        >
-                                            Register
-                                        </Link>
-                                    </>
-                                )}
-                            </nav>
                         </header>
 
                         <main className="mt-6">
@@ -355,7 +434,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                         </footer>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </>
     );
 }

@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.nav_container {
+  height: 15vh;
+  background-color: #020E29;
+  /*background-color: #D69C02;*/
+  /* border-bottom: 2px solid #A76B09; */
+  display: flex;
+  /* justify-content: center; */
+  /* align-items: center; */
+}

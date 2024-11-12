@@ -1,3 +1,67 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #020E29;
+    width: 100%;
+  }
+  
+  .slides {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    /* height: auto; */
+    width: 100%;
+  
+    /*border: 1px solid black;*/
+    /*background-image: linear-gradient( rgba(255,255,255,1) 40%, #D69C02);*/
+    background-color: #020E29;
+    /*background-color: linear-gradient(180deg, rgba( 187, 163, 0, 0,8), rgba(255, 255, 255, 1))*/
+  }
+  
+  .slides .slides-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 70vh; */
+    width: 100%;
+    /*background-color: rgb(255, 255, 255)*/
+  }
+  
+  .gallery_container{
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* height: auto; */
+    width: 90%;
+    background-color: #020E29;
+    /*border: 1px solid black;*/
+  }
+  
+  .heelHeight-filter {
+    width: 100%;
+    /*border: 1px solid black;*/
+  }
+  
+  .sample_images {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 350px;
+  }
+  
+  .footer_container{
+    width: 100%;
+    height: 60vh;
+  }
