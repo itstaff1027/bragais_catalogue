@@ -25,6 +25,10 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/tools', function () {
+    return Inertia::render('Tools/Page');
+})->middleware(['auth', 'verified'])->name('tools');
+
 Route::get('/users', function () {
     return Inertia::render('Users/Page');
 })->middleware(['auth', 'verified'])->name('users');
@@ -36,3 +40,4 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+require __DIR__.'/api.php';

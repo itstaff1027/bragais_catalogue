@@ -12,6 +12,30 @@ export default function AuthenticatedLayout({ header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
+    
+    const routes = [
+        {
+            'id': '0',
+            'name': 'Dashboard',
+            'path': 'dashboard'
+        },
+        {
+            'id': '1',
+            'name': 'Registers',
+            'path': 'registers'
+        },
+        {
+            'id': '2',
+            'name': 'Users',
+            'path': 'users'
+        },
+        {
+            'id': '3',
+            'name': 'Tools',
+            'path': 'tools'
+        }
+    ]
+
     return (
         <div className="flex min-h-screen bg-gray-100">
             <div className="flex border-r border-gray-100 bg-white">
@@ -168,24 +192,14 @@ export default function AuthenticatedLayout({ header, children }) {
                         </Link>
                     </nav>
                     <div className="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            href={route('dashboard')}
-                            active={route().current('dashboard')}
-                        >
-                            Dashboard
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('registers')}
-                            active={route().current('registers')}
-                        >
-                            Registers
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('users')}
-                            active={route().current('users')}
-                        >
-                            Users
-                        </ResponsiveNavLink>
+                        {routes?.map((route, i) => (
+                            <ResponsiveNavLink
+                                href={route(route.path)}
+                                active={route().current(route.path)}
+                            >
+                                {route.name}
+                            </ResponsiveNavLink>
+                        ))}
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4">

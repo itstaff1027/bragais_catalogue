@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import ImageSlider from '@/Components/ImageSlider.jsx'
-
+import { Head, Link } from '@inertiajs/react';
 //const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
 export default function Gallery(){
@@ -118,7 +118,7 @@ export default function Gallery(){
     //}])
     async function fetchData(){
       try {
-        const response = await fetch('/api/get-shoes')
+        const response = await fetch('/public_products')
         const data = await response.json();
         setData(data);
       } catch (error) {
@@ -135,39 +135,39 @@ export default function Gallery(){
   
 
   return (
-    <div className="flex w-full h-auto">
-        <div className="flex flex-col p-2">
-            {buttonArray?.map((button, index) => (
-                <button 
-                key={button.id}
-                onClick={(e) => {
-                    e.preventDefault();
-                    fetchShoes(button.filter);
-                }}
-                
-                className="rounded-full shadow-xl m-2 p-4 bg-none text-white hover:text-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-slate-500 duration-300">
-                {button.name}
-                </button>
-            ))}
-        </div>
-        <div className="border grid grid-cols-4 gaps-4 w-full p-4 h-auto overflow-y-auto" > 
+    <div className="flex w-full h-[700px]">
+      <div className="flex flex-col p-2">
+        {buttonArray?.map((button, index) => (
+          <button 
+            key={button.id}
+            onClick={(e) => {
+                e.preventDefault();
+                fetchShoes(button.filter);
+            }}
+            
+            className="rounded-full shadow-xl m-2 p-4 bg-none text-white hover:text-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-slate-500 duration-300">
+            {button.name}
+          </button>
+        ))}
+      </div>
+      <div className="border grid grid-cols-4 gaps-4 w-full p-4 h-auto overflow-y-auto text-white" > 
         {isLoading ? (<div>Loading ... </div>) : (data?.map((item, index) => (
-            <div key={index} className="sample_images grid-cols-4 gaps-4 rounded-xl shadow-xl p-2">
-                <ImageSlider>
-                    {indexArray.map((i, indexI) => {
-                    return <Image key={i} width={270} height={270} src={`${item.image_path}${item.model.toLowerCase()}_${i}.jpg`} alt="1" loading="lazy" />
-                    })}
-                </ImageSlider>
-                <div className="flex justify-between w-full p-4">
-                    <div>
-                        {item.model}
-                    </div>
-                    <Link href={`${item.page_path}`} >View More</Link>
-                </div>
+          <div key={index} className="sample_images grid-cols-4 gaps-4 rounded-xl shadow-xl p-2">
+            <ImageSlider>
+              {indexArray.map((i, indexI) => {
+                return <img key={i} width={270} height={270} src={`${item.image_path}${item.model.toLowerCase()}_${i}.jpg`} alt="1" loading="lazy" />
+              })}
+            </ImageSlider>
+            <div className="flex justify-between w-full p-4">
+              <div>
+                {item.model}
+              </div>
+              <Link href={`${item.page_path}`} >View More</Link>
             </div>
-            ))
+          </div>
+          ))
         )}
-        </div>
+      </div>
     </div>
   )
 }
