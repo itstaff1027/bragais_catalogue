@@ -3,7 +3,7 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import '/resources/css/authenticatedLayout/styles.css';
 
 export default function AuthenticatedLayout({ header, children }) {
@@ -13,28 +13,28 @@ export default function AuthenticatedLayout({ header, children }) {
         useState(false);
 
     
-    const routes = [
+    const paths = [
         {
             'id': '0',
             'name': 'Dashboard',
-            'path': 'dashboard'
+            'route': 'dashboard'
         },
         {
             'id': '1',
             'name': 'Registers',
-            'path': 'registers'
+            'route': 'registers'
         },
         {
             'id': '2',
             'name': 'Users',
-            'path': 'users'
+            'route': 'users'
         },
         {
             'id': '3',
             'name': 'Tools',
-            'path': 'tools'
+            'route': 'tools'
         }
-    ]
+    ];
 
     return (
         <div className="flex min-h-screen bg-gray-100">
@@ -192,12 +192,13 @@ export default function AuthenticatedLayout({ header, children }) {
                         </Link>
                     </nav>
                     <div className="space-y-1 pb-3 pt-2">
-                        {routes?.map((route, i) => (
+                        {paths.map((path, i) => (
                             <ResponsiveNavLink
-                                href={route(route.path)}
-                                active={route().current(route.path)}
+                                href={route(`${path.route}`)}
+                                active={route().current(`${path.route}`)}
+                                key={i}
                             >
-                                {route.name}
+                                {path.name}
                             </ResponsiveNavLink>
                         ))}
                     </div>
