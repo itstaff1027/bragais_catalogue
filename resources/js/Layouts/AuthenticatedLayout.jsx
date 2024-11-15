@@ -202,6 +202,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 href={route(`${path.route}`)}
                                 active={route().current(`${path.route}`)}
                                 key={i}
+                                subNavLinks={false}
                             >
                                 {path.name}
                             </ResponsiveNavLink>
@@ -219,13 +220,14 @@ export default function AuthenticatedLayout({ header, children }) {
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
+                            <ResponsiveNavLink href={route('profile.edit')} subNavLinks={false}>
                                 Profile
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 method="post"
                                 href={route('logout')}
                                 as="button"
+                                subNavLinks={false}
                             >
                                 Log Out
                             </ResponsiveNavLink>

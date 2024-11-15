@@ -25,13 +25,33 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/tools', function () {
-    return Inertia::render('Tools/Page');
-})->middleware(['auth', 'verified'])->name('tools');
 
 Route::get('/users', function () {
     return Inertia::render('Users/Page');
 })->middleware(['auth', 'verified'])->name('users');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    Route::get('/tools', function () {
+        return Inertia::render('Tools/Page');
+    })->name('tools');
+
+    Route::get('/tools/create-colors', function () {
+        return Inertia::render('Tools/Attributes/Colors/Page');
+    })->name('create-colors');
+
+    Route::get('/tools/create-sizes', function () {
+        return Inertia::render('Tools/Attributes/Sizes/Page');
+    })->name('create-sizes');
+
+    Route::get('/tools/create-heel-heights', function () {
+        return Inertia::render('Tools/Attributes/HeelHeights/Page');
+    })->name('create-heel-heights');
+
+    Route::get('/tools/create-categories', function () {
+        return Inertia::render('Tools/Attributes/Categories/Page');
+    })->name('create-categories');
+});
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
