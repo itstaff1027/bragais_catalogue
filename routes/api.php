@@ -9,4 +9,4 @@ Route::get('/public_products', [PublicProducts::class, 'index']);
 Route::get('/public_products/{id}', [PublicProducts::class, 'show']); 
 
 
-Route::get('/products', [Products::class, 'index'])->middleware(['auth', 'verified']);   
+Route::get('/auth/api/products', [Products::class, 'index'])->middleware(['auth', 'verified']);   

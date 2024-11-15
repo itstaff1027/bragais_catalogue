@@ -33,6 +33,16 @@ Route::get('/users', function () {
     return Inertia::render('Users/Page');
 })->middleware(['auth', 'verified'])->name('users');
 
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/products', function () {
+        return Inertia::render('Products/Page');
+    })->name('products');
+    Route::get('/products/create-product', function () {
+        return Inertia::render('Products/CreateProduct/Page');
+    })->name('create-product');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

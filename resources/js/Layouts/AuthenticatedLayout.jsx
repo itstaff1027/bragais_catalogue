@@ -31,6 +31,11 @@ export default function AuthenticatedLayout({ header, children }) {
         },
         {
             'id': '3',
+            'name': 'Products',
+            'route': 'products'
+        },
+        {
+            'id': '4',
             'name': 'Tools',
             'route': 'tools'
         }
