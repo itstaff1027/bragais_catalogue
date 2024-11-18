@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\DB;
 
-use App\Http\Controllers\Controller;
-use App\Models\Products as ModelsProducts;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use App\Models\Products as ModelsProducts;
 
 class Products extends Controller
 {
