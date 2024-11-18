@@ -1,0 +1,1 @@
+import{j as t}from"./app-Boo4ZqUk.js";import"./AuthenticatedLayout-Lh3r1DoN.js";import{P as r}from"./ProductsLayout-B9YI5Gih.js";import"./ApplicationLogo-C6vlwwvE.js";function d({params:e}){return t.jsx(r,{header:t.jsx("h2",{className:"text-xl font-semibold leading-tight text-gray-800",children:"Create Product"}),children:"Create Products"})}export{d as default};
