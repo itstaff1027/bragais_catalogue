@@ -84,7 +84,7 @@ export default function ColorsPage({ params }){
             </h2>
         }
     >
-        <div className="flex justify-center w-full p-4">
+        <div className="flex-col sm:flex-row sm:flex justify-center w-full p-4">
             <form onSubmit={submit} className="w-full p-4 border">
                 <InputLabel htmlFor="color_name" value="Color Name" />
                 <TextInput
