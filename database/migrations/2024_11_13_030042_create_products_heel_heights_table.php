@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('products_heel_heights', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->integer('heel_heights');
+            $table->decimal('heel_heights', 5, 2);
         });
     }
 

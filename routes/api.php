@@ -1,11 +1,12 @@
 <?php
 
 use Inertia\Inertia;
+use App\Http\Controllers\DB\ProductsHeelHeights;
 use App\Http\Controllers\DB\Products;
-use App\Http\Controllers\DB\ProductsColors;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DB\PublicProducts;
 use App\Http\Controllers\DB\ProductsSizes;
+use App\Http\Controllers\DB\ProductsColors;
+use App\Http\Controllers\DB\PublicProducts;
 
 Route::get('/public_products', [PublicProducts::class, 'index']); 
 Route::get('/public_products/{id}', [PublicProducts::class, 'show']); 
@@ -30,4 +31,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/create-size-values', [ProductsSizes::class, 'create_size_values'])->name('size_values.create');
     Route::post('/update-size-values/{id}', [ProductsSizes::class, 'update_size_values'])->name('size_values.update');
     Route::post('/destroy-size-values/{id}', [ProductsSizes::class, 'destroy_size_values'])->name('size_values.destroy');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/create-HeelHeight', [ProductsHeelHeights::class, 'create_heel_height'])->name('heel_height_name.create');
+    Route::post('/update-HeelHeight/{id}', [ProductsHeelHeights::class, 'update_heel_height'])->name('heel_height_name.update');
+    Route::post('/destroy-HeelHeight/{id}', [ProductsHeelHeights::class, 'destroy_heel_height'])->name('heel_height_name.destroy');
+    Route::get('/auth/api/get-HeelHeights', [ProductsHeelHeights::class, 'get_heel_height'])->name('product.heel_heights');
 });
