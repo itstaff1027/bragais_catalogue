@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use App\Http\Controllers\DB\ProductsHeelHeights;
 use App\Http\Controllers\DB\Products;
+use App\Http\Controllers\DB\ProductsCategories;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DB\ProductsSizes;
 use App\Http\Controllers\DB\ProductsColors;
@@ -38,4 +39,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/update-HeelHeight/{id}', [ProductsHeelHeights::class, 'update_heel_height'])->name('heel_height_name.update');
     Route::post('/destroy-HeelHeight/{id}', [ProductsHeelHeights::class, 'destroy_heel_height'])->name('heel_height_name.destroy');
     Route::get('/auth/api/get-HeelHeights', [ProductsHeelHeights::class, 'get_heel_height'])->name('product.heel_heights');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/create-categories', [ProductsCategories::class, 'create_categories'])->name('categories_name.create');
+    Route::post('/update-categories/{id}', [ProductsCategories::class, 'update_categories'])->name('categories_name.update');
+    Route::post('/destroy-categories/{id}', [ProductsCategories::class, 'destroy_categories'])->name('categories_name.destroy');
+    Route::get('/auth/api/get-categories', [ProductsCategories::class, 'get_categories'])->name('product.categories');
 });
