@@ -57,6 +57,20 @@ export default function ProductsLayout({ header, children }) {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
+                            <div className="flex w-1/2 p-4 justify-between">
+                                {paths?.map((path, i) => (
+                                    <div>
+                                        <ResponsiveNavLink 
+                                            subNavLinks={true} 
+                                            href={route(`${path.route}`)}
+                                            active={route().current(`${path.route}`)}
+                                        >
+                                            {path.name}
+                                        </ResponsiveNavLink>
+                                    </div>
+                                    
+                                ))}
+                            </div>
                             {header && (
                                 <header className="bg-white shadow">
                                     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -64,17 +78,6 @@ export default function ProductsLayout({ header, children }) {
                                     </div>
                                 </header>
                             )}
-                            <div className="flex w-1/2 p-4 justify-between">
-                                {paths?.map((path, i) => (
-                                    <div>
-                                        <Link href={route(`${path.route}`)}>
-                                        {path.name}
-                                    </Link>
-                                    </div>
-                                    
-                                ))}
-                            </div>
-            
                             <main>{children}</main>
                         </div>
                     </div>

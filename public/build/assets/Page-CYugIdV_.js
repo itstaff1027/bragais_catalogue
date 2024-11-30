@@ -1,0 +1,1 @@
+import{j as e}from"./app-CsGr12S2.js";import"./AuthenticatedLayout-rUiPifXh.js";import{T as r}from"./ToolsLayout-CFZf19k0.js";import"./ApplicationLogo-Di_5O6ZB.js";function m({params:t}){return e.jsx(r,{header:e.jsx("h2",{className:"text-xl font-semibold leading-tight text-gray-800",children:"Create Order Types"}),children:"Order Types"})}export{m as default};
