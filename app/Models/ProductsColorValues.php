@@ -5,18 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Products extends Model
+class ProductsColorValues extends Model
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    * The attributes that are mass assignable.
+    *
+    * @var array<int, string>
+    */
     protected $fillable = [
-        'model',
-        'status',
+        'color_id',
+        'product_id',
+        'order_type_id'
     ];
 }

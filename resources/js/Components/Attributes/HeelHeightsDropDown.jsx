@@ -2,15 +2,20 @@
 import { useState, useEffect } from 'react';
 
 
-export default function HeelHeightsDropDown({ className = '', handleCheckBox, selectedItemId, ...props }) {
+export default function HeelHeightsDropDown({ className = '', handleCheckBox, heelHeight=[], ...props }) {
 
     const [items, setItems] = useState([]);
 
-    // const [selectedItemId, setSelectedItemId] = useState("");
+    // const [selectedHeelHeight, setSelectedHeelHeight] = useState(heelHeight);
 
-    // const handleSelectChange = (event) => {
-    //     setSelectedItemId(event.target.value); // Retrieve the id of the selected option
-    // };
+    // Handle checkbox changes
+    const handleHeelHeightChange = (heelHeightId) => {
+        const updatedHeelHeight = heelHeight.includes(heelHeightId)
+            ? heelHeight.filter((id) => id !== heelHeightId) // Remove if already selected
+            : [...heelHeight, heelHeightId]; // Add if not selected
+
+        handleCheckBox(updatedHeelHeight); // Update the parent state
+    };
 
     const fetchData = async () => {
         try {
@@ -42,8 +47,8 @@ export default function HeelHeightsDropDown({ className = '', handleCheckBox, se
                         <input
                             type="checkbox"
                             className="form-checkbox h-5 w-5 text-indigo-600"
-                            checked={selectedItemId.includes(item.id)}
-                            onChange={() => handleCheckBox(item.id)}
+                            checked={heelHeight.includes(item.id)}
+                            onChange={() => handleHeelHeightChange(item.id)}
                             key={item.id}
                         />
                         <label className="ml-4 text-gray-700" key={i}>{item.heel_heights}</label>
