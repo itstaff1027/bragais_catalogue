@@ -1,1 +1,0 @@
-import{j as o}from"./app-CsGr12S2.js";import"./AuthenticatedLayout-rUiPifXh.js";import{T as r}from"./ToolsLayout-CFZf19k0.js";import"./ApplicationLogo-Di_5O6ZB.js";function p({params:t}){return o.jsx(r,{children:"Tools"})}export{p as default};
