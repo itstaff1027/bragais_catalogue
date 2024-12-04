@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DB\ProductsSizes;
 use App\Http\Controllers\DB\ProductsColors;
 use App\Http\Controllers\DB\PublicProducts;
+use App\Http\Controllers\DB\OrderTypes;
 
 Route::get('/public_products', [PublicProducts::class, 'index']); 
 Route::get('/public_products/{id}', [PublicProducts::class, 'show']); 
@@ -48,6 +49,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/update-categories/{id}', [ProductsCategories::class, 'update_categories'])->name('categories_name.update');
     Route::post('/destroy-categories/{id}', [ProductsCategories::class, 'destroy_categories'])->name('categories_name.destroy');
     Route::get('/auth/api/get-categories', [ProductsCategories::class, 'get_categories'])->name('product.categories');
+});
+// Order Types
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/create-order_types', [OrderTypes::class, 'create_order_types'])->name('order_types_name.create');
+    Route::post('/update-order_types/{id}', [OrderTypes::class, 'update_order_types'])->name('order_types_name.update');
+    Route::post('/destroy-order_types/{id}', [OrderTypes::class, 'destroy_order_types'])->name('order_types_name.destroy');
+    Route::get('/auth/api/get-order_types', [OrderTypes::class, 'index'])->name('product.order_types');
 });
 
 // Add Products and its components

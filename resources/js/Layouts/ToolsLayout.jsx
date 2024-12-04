@@ -34,7 +34,13 @@ export default function ToolsLayout({ header, children }) {
             'id': '4',
             'name': 'Categories',
             'route': 'create-categories'
+        },
+        {
+            'id': '5',
+            'name': 'Order Types',
+            'route': 'create-order-types'
         }
+        
     ];
 
     return (

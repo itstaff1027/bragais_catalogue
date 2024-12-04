@@ -51,6 +51,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/tools/create-categories', function () {
         return Inertia::render('Tools/Attributes/Categories/Page');
     })->name('create-categories');
+
+    Route::get('/tools/create-order-types', function () {
+        return Inertia::render('Tools/Attributes/OrderTypes/Page');
+    })->name('create-order-types');
 });
 
 
