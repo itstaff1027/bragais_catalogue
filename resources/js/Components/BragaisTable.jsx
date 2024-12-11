@@ -1,4 +1,4 @@
-export default function BragaisTable({ className = '', tableHead = [], tableBody=[], ...props }) {
+export default function BragaisTable({ className = '', tableHead = [], tableBody, ...props }) {
     return (
         <table
             {...props}
@@ -10,23 +10,15 @@ export default function BragaisTable({ className = '', tableHead = [], tableBody
             <thead>
                 <tr>
                     {tableHead?.map((header, i) => (
-                    <th key={i}>
-                        {header.name}    
-                    </th>
-                ))}
+                        <th key={i}>
+                            {header.name}    
+                        </th>
+                    ))}
                 </tr>
                 
             </thead>
             <tbody>
-                {tableBody?.map((body, i) => (
-                    <tr key={i}>
-                        {body.items?.map((item, j) => (
-                            <td key={i}>
-                                {item.name}    
-                            </td>
-                        ))}
-                    </tr>
-                ))}
+                {tableBody}
             </tbody>
         </table>
     );

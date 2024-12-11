@@ -9,6 +9,9 @@ use App\Http\Controllers\DB\ProductsSizes;
 use App\Http\Controllers\DB\ProductsColors;
 use App\Http\Controllers\DB\PublicProducts;
 use App\Http\Controllers\DB\OrderTypes;
+use App\Http\Controllers\DB\ProductsColorValues;
+use App\Http\Controllers\DB\ProductsHeelHeightValues;
+use App\Http\Controllers\DB\ProductSizeValueIds;
 
 Route::get('/public_products', [PublicProducts::class, 'index']); 
 Route::get('/public_products/{id}', [PublicProducts::class, 'show']); 
@@ -22,7 +25,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/update-color/{id}', [ProductsColors::class, 'update_color'])->name('color_name.update');
     Route::post('/destroy-color/{id}', [ProductsColors::class, 'destroy_color'])->name('color_name.destroy');
     Route::get('/auth/api/get-colors', [ProductsColors::class, 'get_color'])->name('product.colors');
+    // Route::post('/product_with_color/{id}', [ProductsColors::class, 'get_product_with_color'])->name('product_with.colors');
 });
+
+// Color Values
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Route::post('/create-color', [ProductsColors::class, 'create_color'])->name('color_name.create');
+    Route::post('/update-product-color', [ProductsColorValues::class, 'update_product_color'])->name('add_product.color');
+    Route::post('/destroy-product-color', [ProductsColorValues::class, 'destroy_product_color'])->name('remove_product.color');
+    Route::get('/product-selected-colors/{id}', [ProductsColorValues::class, 'color_product'])->name('color_product');
+});
+
 // Sizes
 Route::middleware(['auth', 'verified'])->group(function () {
     // Size Name
@@ -36,6 +49,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/update-size-values/{id}', [ProductsSizes::class, 'update_size_values'])->name('size_values.update');
     Route::post('/destroy-size-values/{id}', [ProductsSizes::class, 'destroy_size_values'])->name('size_values.destroy');
 });
+
+// Sizes Values with Product Ids
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Route::post('/create-HeelHeight', [ProductsHeelHeights::class, 'create_heel_height'])->name('heel_height_name.create');
+    Route::post('/update-Sizes', [ProductSizeValueIds::class, 'update_product_sizes'])->name('sizes_product.update');
+    Route::post('/destroy-Sizes', [ProductSizeValueIds::class, 'destroy_product_sizes'])->name('sizes_product.destroy');
+    Route::get('/product_selected_sizes/{id}', [ProductSizeValueIds::class, 'sizes_product'])->name('sizes_product');
+});
+
 // Heel Heights
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/create-HeelHeight', [ProductsHeelHeights::class, 'create_heel_height'])->name('heel_height_name.create');
@@ -43,12 +65,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/destroy-HeelHeight/{id}', [ProductsHeelHeights::class, 'destroy_heel_height'])->name('heel_height_name.destroy');
     Route::get('/auth/api/get-HeelHeights', [ProductsHeelHeights::class, 'get_heel_height'])->name('product.heel_heights');
 });
+
+// Heel Height Values
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Route::post('/create-HeelHeight', [ProductsHeelHeights::class, 'create_heel_height'])->name('heel_height_name.create');
+    Route::post('/update-HeelHeight', [ProductsHeelHeightValues::class, 'update_product_heelHeight'])->name('heel_height_product.update');
+    Route::post('/destroy-HeelHeight', [ProductsHeelHeightValues::class, 'destroy_product_heelHeight'])->name('heel_height_product.destroy');
+    Route::get('/product_selected_heel_heights/{id}', [ProductsHeelHeightValues::class, 'heel_height_product'])->name('heel_height_product');
+});
+
 // Categories
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/create-categories', [ProductsCategories::class, 'create_categories'])->name('categories_name.create');
     Route::post('/update-categories/{id}', [ProductsCategories::class, 'update_categories'])->name('categories_name.update');
     Route::post('/destroy-categories/{id}', [ProductsCategories::class, 'destroy_categories'])->name('categories_name.destroy');
     Route::get('/auth/api/get-categories', [ProductsCategories::class, 'get_categories'])->name('product.categories');
+
+    Route::post('/update-product-category', [ProductsCategories::class, 'update_product_category'])->name('update_product.category');
 });
 // Order Types
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -61,7 +94,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Add Products and its components
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/create-products', [Products::class, 'create_products'])->name('products_name.create');
-    // Route::post('/update-products/{id}', [Products::class, 'update_products'])->name('products_name.update');
+    Route::post('/update-status', [Products::class, 'update_status'])->name('product_update.status');
+    Route::post('/update-model', [Products::class, 'update_model'])->name('update_product.model');
+    Route::get('/edit-products/{id}', [Products::class, 'edit_product'])->name('product.edit');
+    Route::get('/get/product-keys/{id}', [Products::class, 'get_product_keys'])->name('storage.product_keys');
+    Route::post('/create/product-keys/{id}', [Products::class, 'create_product_keys'])->name('storage_create.product_keys');
     // Route::post('/destroy-products/{id}', [Products::class, 'destroy_products'])->name('products_name.destroy');
-    // Route::get('/auth/api/get-products', [Products::class, 'get_products'])->name('product.products');
+    Route::get('/auth/api/get-products', [Products::class, 'index'])->name('all_product');
 });

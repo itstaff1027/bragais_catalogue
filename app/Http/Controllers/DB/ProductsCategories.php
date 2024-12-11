@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\Models\ProductsCategories as ModelsProductsCategories;
+use App\Models\ProductsCategoryValues;
 
 class ProductsCategories extends Controller
 {
@@ -36,6 +37,22 @@ class ProductsCategories extends Controller
         $product->update(['categories' => $request->input('categories_name')]);
 
         return redirect()->back()->with('success', 'Updated categories!');
+    }
+
+    public function update_product_category(Request $request){
+        // Find the record by the `product_id` column
+        $product_category = ProductsCategoryValues::where('product_id', $request->id)->first();
+
+        // Check if the record exists
+        if (!$product_category) {
+            return redirect()->back()->with('error', 'Product Category not found!');
+        }
+
+        // Update the category_id
+        $product_category->update(['category_id' => $request->category_id]);
+
+        // Return success response
+        return redirect()->back()->with('success', 'Product Category has been updated!');
     }
 
     public function destroy_categories(Request $request, $id): RedirectResponse 

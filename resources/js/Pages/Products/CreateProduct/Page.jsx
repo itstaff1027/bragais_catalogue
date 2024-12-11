@@ -7,7 +7,7 @@ import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import ColorsCheckBox from '@/Components/Attributes/ColorsCheckBox';
 import SizesDropDown  from '@/Components/Attributes/SizesDropDown';
-import HeelHeightsDropDown from '@/Components/Attributes/HeelHeightsDropDown';
+import HeelHeights from '@/Components/Attributes/HeelHeightsDropDown';
 import CategoriesDropDown from '@/Components/Attributes/CategoriesDropDown';
 import RadioButtonStatus from '@/Components/Attributes/RadioButtonStatus';
 
@@ -16,15 +16,15 @@ export default function CreateProductPage({ params }){
     model: '',
     status: '',
     color_id: [],
-    size_id: 1,
+    size_id: [],
     heel_height_id: [],
     category_id: 1,
   });
 
   const submit = (e) =>  {
     e.preventDefault();
-    console.log(data.status)
     // setData('status', selectedStatus);
+    // console.log(data);
     post(route('products_name.create'),{
       onSuccess: () => {
         reset('model', 'status', 'color_id', 'size_id', 'heel_height_id', 'category_id');
@@ -61,21 +61,35 @@ export default function CreateProductPage({ params }){
           <InputError message={errors.status} className="mt-2" />
           <hr />
           <InputLabel htmlFor="colors" value="Colors" />
-          <div className="p-4 h-36 overflow-auto">
-            <ColorsCheckBox.Colors handleCheckBox={(colorIds) => setData('color_id', colorIds)} colors={data.colors} />
+          <div className="p-4 h-36 overflow-y-auto">
+          <ColorsCheckBox.Colors 
+            handleSelectedColor={(selectedColor, isRemoving = false) => {
+              if (isRemoving) {
+                // Remove the color by ID
+                setData('color_id', data.color_id.filter(color => color.id !== selectedColor.id)); // Remove the color by ID
+              } else {
+                // Check if the color is already in the list before adding it
+                if (!data.color_id.some(color => color.id === selectedColor.id)) {
+                  // Add the selected color
+                  setData('color_id', [...data.color_id, selectedColor]);
+                }
+              }
+            }} 
+            colors={data.color_id} 
+          />
           </div>
           <InputError message={errors.color_id} className="mt-2" />
           <hr />
           <InputLabel htmlFor="sizes" value="Sizes" />
           <div className="p-4">
-            <SizesDropDown.Sizes handleSelectChange={(e) => setData('size_id', e.target.value)} selectedItemId={data.size_id}/>
+            <SizesDropDown.CheckBox handleSizeCheckBox={(sizeIds) => setData('size_id', sizeIds)} sizeSelectedId={data.size_id}/>
             <InputError message={errors.size_id} className="mt-2" />
 
           </div>
           <hr />
           <InputLabel htmlFor="heel_heights" value="Heel Heights" />
           <div className="p-4">
-            <HeelHeightsDropDown handleCheckBox={(heelHeightIds) => setData('heel_height_id', heelHeightIds)} heelHeight={data.heel_height_id}/>
+            <HeelHeights.CheckBox handleCheckBox={(heelHeightIds) => setData('heel_height_id', heelHeightIds)} heelHeight={data.heel_height_id}/>
             <InputError message={errors.heel_height_id} className="mt-2" />
 
           </div>

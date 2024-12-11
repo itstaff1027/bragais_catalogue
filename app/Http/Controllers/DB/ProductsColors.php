@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\DB;
 
+use App\Models\ProductsColorValues;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -12,6 +13,16 @@ class ProductsColors extends Controller
     public function get_color() {
         $colors = ModelProductsColors::all();
         return response()->json($colors);
+    }
+
+    public function get_product_with_color(Request $request, $id){
+        $test = ProductsColorValues::findOrFail($id);
+        // $product_with_color = ProductsColorValues::where('products_color_values.product_id', $id)
+        // ->leftJoin('products_colors', 'products_colors.id', '=', 'products_color_values.color_id')
+        // ->select('products_color_values.*', 'products_colors.*') // Select columns explicitly
+        // ->get();
+        // dd($test);
+        return response()->json($test);
     }
 
     public function create_color(Request $request): RedirectResponse 

@@ -1,6 +1,7 @@
 <?php
 
 use Inertia\Inertia;
+use App\Http\Controllers\DB\Products;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
@@ -59,9 +60,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/products', function () {
-        return Inertia::render('Products/Page');
-    })->name('products');
+    Route::get('/products', [Products::class, 'index'])->name('products');
     Route::get('/products/create-product', function () {
         return Inertia::render('Products/CreateProduct/Page');
     })->name('create-product');
