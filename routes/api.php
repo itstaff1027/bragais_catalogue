@@ -12,12 +12,15 @@ use App\Http\Controllers\DB\OrderTypes;
 use App\Http\Controllers\DB\ProductsColorValues;
 use App\Http\Controllers\DB\ProductsHeelHeightValues;
 use App\Http\Controllers\DB\ProductSizeValueIds;
+use App\Http\Controllers\ImageUploader;
 
 Route::get('/public_products', [PublicProducts::class, 'index']); 
 Route::get('/public_products/{id}', [PublicProducts::class, 'show']); 
 
 
 Route::get('/auth/api/products', [Products::class, 'index'])->middleware(['auth', 'verified']);   
+
+Route::post('/upload-image', [ImageUploader::class, 'upload'])->middleware(['auth', 'verified'])->name('upload.image');
 
 // Color
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -97,8 +100,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/update-status', [Products::class, 'update_status'])->name('product_update.status');
     Route::post('/update-model', [Products::class, 'update_model'])->name('update_product.model');
     Route::get('/edit-products/{id}', [Products::class, 'edit_product'])->name('product.edit');
+
+    // get remove and add images
     Route::get('/get/product-keys/{id}', [Products::class, 'get_product_keys'])->name('storage.product_keys');
     Route::post('/create/product-keys/{id}', [Products::class, 'create_product_keys'])->name('storage_create.product_keys');
+    Route::post('/remove_product_images', [Products::class, 'destroy_product_keys'])->name('product_image.destroy');
+
     // Route::post('/destroy-products/{id}', [Products::class, 'destroy_products'])->name('products_name.destroy');
     Route::get('/auth/api/get-products', [Products::class, 'index'])->name('all_product');
 });

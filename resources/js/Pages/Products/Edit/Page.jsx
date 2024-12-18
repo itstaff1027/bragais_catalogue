@@ -11,6 +11,7 @@ import SizesDropDown  from '@/Components/Attributes/SizesDropDown';
 import HeelHeights from '@/Components/Attributes/HeelHeightsDropDown';
 import Categories from '@/Components/Attributes/CategoriesDropDown';
 import RadioButtonStatus from '@/Components/Attributes/RadioButtonStatus';
+import ImageUploader from '@/Components/Image';
 
 export default function EditProductPage({ items }){
     const { data, setData, post, processing, errors, reset, isDirty } = useForm({
@@ -18,13 +19,16 @@ export default function EditProductPage({ items }){
         model: items.model,
         status: items.status,
         size_id: items.size_id,
-        category_id: items.category_id
+        category_id: items.category_id,
+        image: null,
+        folder: 'local_images'
     });
 
     const { props } = usePage();
 
     const [model, setModel] = useState(items.model);
 
+    const [preview, setPreview] = useState(null); // State to store preview URL
     const [images, setImages] = useState([]);
     const [filteredOptions, setFilteredOptions] = useState([]);
     const [selectedColors, setSeslectedColors] = useState([]);
@@ -111,7 +115,7 @@ export default function EditProductPage({ items }){
     }
 
     const addSize = (size) => {
-        console.log(size);
+        // console.log(size);
         router.post(route('sizes_product.update'), size, {
             onSuccess: () => {
                 reset('model', 'status', 'product_color_id', 'size_id', 'heel_height_id', 'category_id');
@@ -219,11 +223,20 @@ export default function EditProductPage({ items }){
     // };
 
     // // Function to handle removing an input field
-    // const removeInput = (id) => {
-    //     const updatedInputs = inputs.filter((input) => input.id !== id); // Remove the selected input
-    //     setInputs(updatedInputs);
-    //     setData('product_keys', updatedInputs); // Sync with external data state
-    // };
+    const removeImage = (data) => {
+        router.post(route('product_image.destroy'), data, {
+            onSuccess: () => {
+                reset('model', 'status', 'product_color_id', 'size_id', 'heel_height_id', 'category_id');
+            },
+            onError: (error) => {
+                console.error('An error occurred:', error); // Handle error
+            },
+            onFinish: () => {
+                fetchImages();
+            },
+            preserveScroll: true,
+        })
+    };
 
     // Function to handle changes in input values
     const handleInputChange = (id, newValue) => {
@@ -261,7 +274,6 @@ export default function EditProductPage({ items }){
 
             const data = await response.json()
             setImages(data);
-            // console.log(data);
             // if(data){
             //     setInputs([...data]);
             // }
@@ -392,6 +404,39 @@ export default function EditProductPage({ items }){
         }
     };
 
+    
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setData('image', event.target.files[0]);
+        if (file) {
+            // Check if the file is an image
+            if (file.type.startsWith("image/")) {
+                setPreview(URL.createObjectURL(file)); // Generate preview URL
+            } else {
+                alert("Please select a valid image file.");
+            }
+        }
+    };
+
+    const handleUpload = () => {
+        router.post(route('upload.image'), data, {
+            onSuccess: (page) => {
+                // console.log(page.props.url);
+                const url = page.props.url; 
+                // console.log(url);
+                // reset('model', 'status', 'product_color_id', 'size_id', 'heel_height_id', 'category_id');
+            },
+            onError: (error) => {
+                console.error('An error occurred:', error); // Handle error
+            },
+            onFinish: () => {
+                fetchImages();
+            },
+            
+            preserveScroll: true,
+        });
+    };
+
     useEffect(() => {
         fetchImages();
         getSelectionColors();
@@ -411,119 +456,37 @@ export default function EditProductPage({ items }){
                 </h2>
             }
         >
+            
             <div className="flex flex-col justify-center w-full">
+            <ImageUploader handleFileChange={handleFileChange} handleUpload={handleUpload} preview={preview} product_id={items.id} />
                 {images.length > 0 ? (
-                    <form onSubmit={submit} className="flex flex-col w-full p-4">
+                    <div className="flex flex-col w-full p-4">
                         <div  className="flex w-full p-4 overflow-auto">
                             {images.map((keys) => (
                                 <div key={keys.id} className="flex w-full p-1">
-                                    <div className="flex flex-col justify-center items-center" key={keys.id}>
-                                        {keys.storage_value === 'empty' ? (
-                                            <div className="flex justify-center items-center text-white w-36 h-36 bg-slate-400/50 rounded-lg p-4 m-1">
-                                                + Image
-                                            </div>
-                                        ) : (
-                                            // <img src="https://drive.google.com/uc?export=view&id=1pNSE-2pnr7dleTEatWY2qK3AbT1LDftt" alt="Image" />
-                                            <img 
-                                                src={'/assets/jehzasilver.webp'} 
-                                                className="w-80" 
-                                                alt="Google Drive Image"
-                                            />
-                                        )
+                                    <div
+                                        className="flex flex-col justify-center items-center relative"
+                                        key={keys.id}
+                                    >
+                                        <img
+                                            src={`${keys.storage_url}`}
+                                            alt="Product Image"
+                                        />
+                                        <button
+                                            type="button"
+                                            key={keys.id}
+                                            onClick={() => removeImage({ id: keys.id, path: keys.storage_values})}
+                                            className="absolute top-0 right-0 bg-red-500 text-white px-3 rounded-3xl hover:bg-red-700 transition delay-30"
+                                        >
+                                            Trash
+                                        </button>
+                                    </div>
 
-                                        }
-                                        
-                                        {/* <img  src={'/assets/BB3.png'} className="w-16" /> */}
-                                        <TextInput
-                                            id="keys"
-                                            type="text"
-                                            name="keys"
-                                            value={keys.storage_value}
-                                            placeholder="Add Google Keys"
-                                            className=" rounded-3xl"
-                                            isFocused={true}
-                                            onChange={(e) => handleKeysChange(keys.id, e.target.value)}
-                                        />
-                                    </div>
-                                    {/* <button
-                                        type="button"
-                                        onClick={() => removeInput(input.id)}
-                                        className="bg-red-500 text-white px-3 rounded-3xl hover:bg-red-700 transition delay-30"
-                                    >
-                                        Trash
-                                    </button> */}
                                 </div>
                             ))}
                         </div>
-                        
-                        {/* <button
-                            type="button"
-                            onClick={addInput}
-                            className={`w-1/2 mt-4 px-4 py-2 rounded-full ${inputs.length === 5 ? 'bg-slate-100' : 'text-black bg-gray-100/50 hover:bg-gray-500 transition delay-30'}`}
-                            disabled={inputs.length === 5 ? true : false}
-                        >
-                            + Image
-                        </button> */}
-                        {inputs.some((input) => input.value.trim() !== '') && ( // Check if any input has a value
-                            <button
-                                type="submit"
-                                className="m-2 p-2 w-1/6 rounded-full bg-blue-400"
-                            >
-                                Update
-                            </button>
-                        )}
-                        
-                    </form>
-                ) : (
-                    <form onSubmit={submitImages} className="flex flex-col w-full p-4">
-                        <div  className="flex w-full p-4 overflow-auto">
-                            {inputs.map((input) => (
-                                <div key={input.id} className="flex w-full p-1">
-                                    <div className="flex flex-col justify-center items-center" key={input.id}>
-                                        <div className="flex justify-center items-center text-white w-36 h-36 bg-slate-400/50 rounded-lg p-4 m-1">
-                                            + image
-                                        </div>
-                                        {/* <img  src={'/assets/BB3.png'} className="w-16" /> */}
-                                        <TextInput
-                                            id="input"
-                                            type="text"
-                                            name="input"
-                                            value={input.value}
-                                            placeholder="Add Google Keys"
-                                            className=" rounded-3xl"
-                                            isFocused={true}
-                                            onChange={(e) => handleInputChange(input.id, e.target.value)}
-                                        />
-                                        <InputError message={errors.product_keys} className="mt-2" />
-                                    </div>
-                                    {/* <button
-                                        type="button"
-                                        onClick={() => removeInput(input.id)}
-                                        className="h-8 bg-red-500 text-white px-3 rounded-3xl hover:bg-red-700 transition delay-30"
-                                    >
-                                        Trash
-                                    </button> */}
-                                </div>
-                            ))}
-                        </div>
-                        {/* <button
-                            type="button"
-                            onClick={addInput}
-                            className={` mt-4 px-4 py-2 rounded-full ${inputs.length === 5 ? 'bg-slate-100' : 'text-black bg-gray-100/50 hover:bg-gray-500 transition delay-30'}`}
-                            disabled={inputs.length === 5 ? true : false}
-                        >
-                            + Image
-                        </button> */}
-                        {inputs.some((input) => input.value.trim() !== '') && ( // Check if any input has a value
-                            <button
-                                type="submit"
-                                className="m-2 p-2 w-1/6 rounded-full bg-emerald-400"
-                            >
-                                Submit
-                            </button>
-                        )}
-                    </form>
-                )}
+                    </div>
+                ) : (<div> No Images can Display, Upload an Image to Display.</div>)}
                 {/* {isDirty && <div className="p-4 bg-red-500 rounded-xl text-white">There are unsaved form changes.</div>} */}
                 <div className="w-full p-4">
                     <InputLabel htmlFor="model" value="Model Name" />
@@ -537,11 +500,11 @@ export default function EditProductPage({ items }){
                         onChange={(e) => setData('model', e.target.value)}
                     />
 
-                    {model !== data.model ? (
+                    {model !== data.model && (
                         <>
                             <button className="p-4 m-4 rounded-xl text-white bg-blue-400" type="submit" onClick={updateModel}>Update</button>
                         </>
-                    ) : (<></>)}
+                    )}
                     <InputError message={errors.model} className="mt-2" />
                     <hr />
                     <InputLabel htmlFor="status" value="Statuses" />

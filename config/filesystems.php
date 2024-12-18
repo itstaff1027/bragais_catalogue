@@ -57,6 +57,17 @@ return [
             'throw' => false,
         ],
 
+        'do' => [
+            'driver' => 's3',
+            'key' => env('DO_SPACE_KEY'),        // Your Access Key
+            'secret' => env('DO_SPACE_SECRET'),   // Your Secret Key
+            'endpoint' => env('DO_SPACE_ENDPOINT'), // Endpoint URL (e.g., https://nyc3.digitaloceanspaces.com)
+            'region' => env('DO_SPACE_REGION'),    // Region (e.g., nyc3)
+            'bucket' => env('DO_SPACE_BUCKET'),    // Your Space name
+            'url' => env('DO_SPACE_URL'),          // URL if needed
+            'use_path_style_endpoint' => env('DO_USE_PATH_STYLE_ENDPOINT', false),
+            'visibility' => 'public', // Default visibility
+        ],
     ],
 
     /*

@@ -16,6 +16,7 @@ use App\Models\ProductsHeelHeightValues;
 use App\Models\Products as ModelsProducts;
 use App\Models\ProductStorageKeys;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 
 class Products extends Controller
 {
@@ -51,65 +52,85 @@ class Products extends Controller
     {
         $dataKeys = ProductStorageKeys::where('product_id', $id)->get();
         
-        // Decrypt each key
-        $decryptedKeys = $dataKeys->map(function ($key) {
+        // // Decrypt each key
+        $dataWithUrls = $dataKeys->map(function ($key) {
 
             
             return [
                 'id' => $key['id'],
                 'product_id' => $key['product_id'],
-                'storage_value' => Crypt::decrypt($key['storage_values']), // Decrypt the value
-                // 'storage_value' => 'https://drive.google.com/uc?export=view&id=1XbGwdiSl9bQVbIJ-NZN4WEFpsqRe5lv0',
+                'storage_values' => $key['storage_values'], // Decrypt the value
+                'storage_url' => config('filesystems.disks.do.url') . '/' . $key['storage_values'], // Decrypt the value
                 'created_at' => $key['created_at'],
                 'updated_at' => $key['updated_at'],
             ];
         });
     
-        // Dump the decrypted keys (optional for debugging)
-        // dd($decryptedKeys);
+        // // Dump the decrypted keys (optional for debugging)
+        // // dd($decryptedKeys);
     
-        // Return the decrypted keys as JSON
-        return response()->json($decryptedKeys);
+        // // Return the decrypted keys as JSON
+        return response()->json($dataWithUrls);
     }
 
-    public function create_product_keys(Request $request, $id){
-        $request->validate([
-            'product_keys' => 'required|array|min:5', // Ensure it's an array and has at least 5 items
-        ]);
-        // dd($request->product_keys[0]['value']);
-        try {
-            DB::beginTransaction();
-            if($request->product_keys){
-                foreach ($request->product_keys as $keys) {
-                    $value = $keys['value'] ?? 'empty';
+    // public function create_product_keys(Request $request, $id){
+    //     $request->validate([
+    //         'product_keys' => 'required|array|min:5', // Ensure it's an array and has at least 5 items
+    //     ]);
+    //     // dd($request->product_keys[0]['value']);
+    //     try {
+    //         DB::beginTransaction();
+    //         if($request->product_keys){
+    //             foreach ($request->product_keys as $keys) {
+    //                 $value = $keys['value'] ?? 'empty';
     
-                    // Encrypt the value
-                    $encryptedValue = Crypt::encrypt($value);
+    //                 // Encrypt the value
+    //                 $encryptedValue = Crypt::encrypt($value);
     
-                    // Save the encrypted value
-                    ProductStorageKeys::create([
-                        'product_id' => $id,
-                        'storage_values' => $encryptedValue,
-                    ]);
-                }
-                DB::commit();
-            }
-            else {
-                // If product creation fails, throw an exception to trigger a rollback
-                throw new \Exception('Product creation failed');
-                // return redirect()->back()->with('error', 'Product creation failed!');
-            }
-            // return redirect()->back()->with('success', 'Product created successfully!');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            error_log('Error creating product: ' . $e->getMessage());
-            // Log the error (optional)
-            // Logs::error('Error creating product: ' . $e->getMessage());
+    //                 // Save the encrypted value
+    //                 ProductStorageKeys::create([
+    //                     'product_id' => $id,
+    //                     'storage_values' => $encryptedValue,
+    //                 ]);
+    //             }
+    //             DB::commit();
+    //         }
+    //         else {
+    //             // If product creation fails, throw an exception to trigger a rollback
+    //             throw new \Exception('Product creation failed');
+    //             // return redirect()->back()->with('error', 'Product creation failed!');
+    //         }
+    //         // return redirect()->back()->with('success', 'Product created successfully!');
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         error_log('Error creating product: ' . $e->getMessage());
+    //         // Log the error (optional)
+    //         // Logs::error('Error creating product: ' . $e->getMessage());
         
-            // Return an error response
-            return redirect()->back()->with('error', 'Something went wrong: ' . $e->getMessage());
-        }
+    //         // Return an error response
+    //         return redirect()->back()->with('error', 'Something went wrong: ' . $e->getMessage());
+    //     }
 
+    // }
+
+    public function destroy_product_keys(Request $request): RedirectResponse 
+    {
+        // dd($request);
+        // $request->validate([
+        //     'id' => 'required',
+        // ]);
+ 
+        Storage::disk('do')->delete($request->path);
+
+        $image = ProductStorageKeys::findOrFail($request->id);
+        
+        if($image){
+            $image->delete();
+            return redirect()->back()->with('success', 'Successfully Deleted!');
+        }
+        else{
+            return redirect()->back()->with('error', 'Cannot Find the categories!');
+        }
     }
 
     public function create_products(Request $request): RedirectResponse 
