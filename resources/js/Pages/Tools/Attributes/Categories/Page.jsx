@@ -11,6 +11,7 @@ export default function CategoriesPage({ params }){
   const { data, setData, post, processing, errors, reset } = useForm({
     id: 0,
     categories_name: '',
+    categories_gender: 'male'
   });
 
   const [success, setSuccess] = useState(false);
@@ -38,12 +39,23 @@ export default function CategoriesPage({ params }){
       e.preventDefault();
       post(route('categories_name.update', { id: data.id }),{
           onSuccess: () => {
-              reset("id");
+              reset();
               fetchData();
               setSelectedCategoriesId("");
           }  
       });
   };
+
+    const addGender = (e) =>  {
+        e.preventDefault();
+        post(route('categories_gender.update', { id: data.id }),{
+            onSuccess: () => {
+                reset();
+                fetchData();
+                setSelectedCategoriesId("");
+            }  
+        });
+    };
 
   const destroySubmit = (e) =>  {
       e.preventDefault();
@@ -113,7 +125,7 @@ export default function CategoriesPage({ params }){
                     </option>
                     ))}
                 </select>
-                {selectedCategoriesId ? (
+                {selectedCategoriesId && (
                     <>
                         <form onSubmit={updateSubmit} className="mt-1 block w-full">
                             <InputLabel htmlFor="categories_name" value="Update Categories Name here..." />
@@ -127,6 +139,23 @@ export default function CategoriesPage({ params }){
                                 onChange={(e) => setData('categories_name', e.target.value)}
                             />
                             <InputError message={errors.categories_name} className="mt-2" />
+                            <button
+                                className="mt-2 p-2 text-white bg-emerald-500 rounded-2xl w-full"
+                                type="submit"
+                                disabled={processing || !selectedCategoriesId} // Disable if no selection
+                            >
+                                Update
+                            </button>
+                        </form>
+                        <form onSubmit={addGender} className="mt-1 block w-full">
+                            <InputLabel htmlFor="categories_gender" value="Update Gender Category..." />
+                            <select onChange={(e) => setData('categories_gender', e.target.value)}>
+                                <option disabled>Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="none">None</option>
+                            </select>
+                            <InputError message={errors.categories_gender} className="mt-2" />
                             <button
                                 className="mt-2 p-2 text-white bg-emerald-500 rounded-2xl w-full"
                                 type="submit"
@@ -149,7 +178,7 @@ export default function CategoriesPage({ params }){
                     </>
                     
                     
-                ) : ''}
+                )}
 
             </div>
             

@@ -1,126 +1,54 @@
 import { useState, useEffect } from 'react'
 import ImageSlider from '@/Components/ImageSlider.jsx'
 import { Head, Link } from '@inertiajs/react';
+import { urlPath } from '@/Constant/Constant';
 //const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
 export default function Gallery(){
   
   const [filter, setFilter] = useState([])
+  const [filterHeelHeights, setFilterHeelHeights] = useState([]);
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [isLoading, setLoading] = useState(true);
   //const { data, error, isLoading } = useSWR('/api/get-shoes', fetcher);
-  
-  const indexArray = [1, 2, 3, 4]; 
 
-  const buttonArray = [
-    {
-      "id": 0,
-      "name": "All",
-      "filter": {
-        "type": "All",
-        "sub_type": "none"
-      }
-    },
-    {
-      "id": 1,
-      "name": "6.5 Inches",
-      "filter": {
-        "type": "Pageant",
-        "sub_type": "6.5",
-      }
-    },
-    {
-      "id": 2,
-      "name": "5.5 Inches",
-      "filter": {
-        "type": "Pageant",
-        "sub_type": "5.5",
-      }
-    },
-    {
-      "id": 3,
-      "name": "5 Inches",
-      "filter": {
-        "type": "Pageant",
-        "sub_type": "5",
-      }
-    },
-    {
-      "id": 4,
-      "name": "4 Inches",
-      "filter": {
-        "type": "Heels",
-        "sub_type": "4",
-      }
-    },
-    {
-      "id": 5,
-      "name": "Mandiator",
-      "filter": {
-        "type": "Mandiator",
-        "sub_type": "None",
-      }
-    },
-    {
-      "id": 6,
-      "name": "Wondiator",
-      "filter": {
-        "type": "Wondiator",
-        "sub_type": "4",
-      }
-    },
-    {
-      "id": 7,
-      "name": "Sandals",
-      "filter": {
-        "type": "Sandals",
-        "sub_type": "None",
-      }
-    },
-    {
-      "id": 8,
-      "name": "Belts",
-      "filter": {
-        "type": "Accessory",
-        "sub_type": "None",
-      }
-    }
-  ]
-  
-  const fetchShoes = async (filter) => {
-    //const { data, error, isLoading } = useSWR('/api/get-shoes', fetcher);
-    const interval = 1500;
-    setLoading(true);
+  const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/get-shoes', {
-        method: 'POST',
+      const response = await fetch(route('public-product.categories'), {
         headers: {
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(filter)
+        }
       })
       const data = await response.json();
-      //console.log(data)
-       setData(data);
+      setCategories(data);
     } catch (error) {
       console.error("Something went wrong!", error);
-    } finally {
-      setInterval(() => {
-        setLoading(false);
-      }, interval);
+    } 
+  }
+
+  const filterProducts = (value) => {
+    if(value === 'all'){
+      const originalData = data;
+      setFilteredData(originalData)
+    }else{
+      const filtered = data.filter(product => 
+        product.category === value || product.heel_heights.some((item) => item.heel_height === value)
+      );
+      setFilteredData(filtered);
     }
   }
   
   useEffect(() => {
-    //setFilter([{
-    //  "type": "All",
-    //  "sub_type": "None"
-    //}])
     async function fetchData(){
       try {
-        const response = await fetch('/public_products')
+        const response = await fetch(route('public_products'))
         const data = await response.json();
+        console.log(data);
         setData(data);
+        setFilteredData(data);
+        setFilterHeelHeights([...new Set(data.flatMap((product) => product.heel_heights.map((item => item.heel_height))).filter(Boolean))]);
       } catch (error) {
         console.error("Something went wrong!", error);
       } finally {
@@ -128,46 +56,70 @@ export default function Gallery(){
       }
     }
 
-    fetchData()
+    fetchData();
+    fetchCategories();
   }, []);
 
-  //if (error) return <div>Failed to load</div>;
-  
-
   return (
-    <div className="flex w-full h-[700px]">
-      <div className="flex flex-col p-2">
-        {buttonArray?.map((button, index) => (
-          <button 
-            key={button.id}
+    <div className="sm:flex w-full h-[700px]">
+      <div className="flex sm:flex-col justify-between items-center p-2 overflow-x-auto">
+          <button
             onClick={(e) => {
-                e.preventDefault();
-                fetchShoes(button.filter);
+              e.preventDefault();
+              filterProducts('all');
             }}
-            
             className="rounded-full shadow-xl m-2 p-4 bg-none text-white hover:text-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-slate-500 duration-300">
-            {button.name}
+              All
           </button>
-        ))}
+          {categories?.filter(category => category.gender === 'female' || category.gender === 'none').map((button, index) => (
+            <button 
+              key={button.id}
+              onClick={(e) => {
+                  e.preventDefault();
+                  filterProducts(button.categories);
+              }}
+                
+              className="rounded-full shadow-xl m-2 p-4 bg-none text-white hover:text-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-slate-500 duration-300">
+              {button.categories}
+            </button>
+          ))}
       </div>
-      <div className="border grid grid-cols-4 gaps-4 w-full p-4 h-auto overflow-y-auto text-white" > 
-        {isLoading ? (<div>Loading ... </div>) : (data?.map((item, index) => (
-          <div key={index} className="sample_images grid-cols-4 gaps-4 rounded-xl shadow-xl p-2">
-            <ImageSlider>
-              {indexArray.map((i, indexI) => {
-                return <img key={i} width={270} height={270} src={`${item.image_path}${item.model.toLowerCase()}_${i}.jpg`} alt="1" loading="lazy" />
-              })}
-            </ImageSlider>
-            <div className="flex justify-between w-full p-4">
-              <div>
-                {item.model}
-              </div>
-              <Link href={`${item.page_path}`} >View More</Link>
-            </div>
-          </div>
-          ))
-        )}
+      <div className="flex flex-col w-full">
+        <div className="flex w-full text-white justify-center items-center">
+          {filterHeelHeights.map((heel_height, index) => (
+            <button onClick={(e) => {
+                e.preventDefault();
+                filterProducts(heel_height);
+              }} 
+              key={index} className="rounded-full shadow-xl m-2 p-4 bg-none text-white hover:text-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-slate-500 duration-300"
+            >
+              {heel_height}
+            </button>
+          ))}
+        </div>
+
+        <div className="sm:grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 w-full p-4 h-auto overflow-y-auto flex overflow-x-auto text-white" > 
+          {isLoading ? (<div>Loading ... </div>) : (filteredData?.map((item, index) => {
+              return (
+                <div key={index} className="flex flex-col w-[300px] sm:max-w-xs rounded-xl shadow-xl bg-gray-800">
+                  {/* Image Slider */}
+                  <ImageSlider>
+                    {item.image_url ? item.image_url?.map((path, i) => {
+                      return <img key={i} width={270} height={270} src={`${urlPath}${path.storage_values}`} alt={`image-${path.image_url}`} />;
+                    }) : ''}
+                  </ImageSlider>
+
+                  <div className="flex justify-between w-full p-4">
+                    <div>{item.model}</div>
+                    <Link href={`${item.page_path}`}>View More</Link>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
       </div>
+      
     </div>
   )
 }

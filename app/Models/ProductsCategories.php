@@ -16,6 +16,7 @@ class ProductsCategories extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'categories'
+        'categories',
+        'gender'
     ];
 }

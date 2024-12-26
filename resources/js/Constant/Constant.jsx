@@ -1,0 +1,1 @@
+export const urlPath = 'https://jojobragais.catalogue.sgp1.digitaloceanspaces.com/' 

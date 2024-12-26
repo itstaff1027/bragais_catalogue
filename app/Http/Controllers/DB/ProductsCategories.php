@@ -39,6 +39,19 @@ class ProductsCategories extends Controller
         return redirect()->back()->with('success', 'Updated categories!');
     }
 
+    public function update_categories_gender(Request $request, $id) {
+        // dd($request->input('categories_gender'));
+        $request->validate([
+            'categories_gender' => 'required|string|max:255',
+        ]);
+    
+        $product = ModelsProductsCategories::findOrFail($id);
+        // dd($product);
+        $product->update(['gender' => $request->input('categories_gender')]);
+
+        return redirect()->back()->with('success', 'Updated categories!');
+    }
+
     public function update_product_category(Request $request){
         // Find the record by the `product_id` column
         $product_category = ProductsCategoryValues::where('product_id', $request->id)->first();

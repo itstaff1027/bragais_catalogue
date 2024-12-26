@@ -14,9 +14,9 @@ use App\Http\Controllers\DB\ProductsHeelHeightValues;
 use App\Http\Controllers\DB\ProductSizeValueIds;
 use App\Http\Controllers\ImageUploader;
 
-Route::get('/public_products', [PublicProducts::class, 'index']); 
+Route::get('/public_products', [PublicProducts::class, 'index'])->name('public_products'); 
 Route::get('/public_products/{id}', [PublicProducts::class, 'show']); 
-
+Route::get('/public/get-categories', [PublicProducts::class, 'get_categories'])->name('public-product.categories');
 
 Route::get('/auth/api/products', [Products::class, 'index'])->middleware(['auth', 'verified']);   
 
@@ -81,6 +81,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/create-categories', [ProductsCategories::class, 'create_categories'])->name('categories_name.create');
     Route::post('/update-categories/{id}', [ProductsCategories::class, 'update_categories'])->name('categories_name.update');
+    Route::post('/update-categories-gender/{id}', [ProductsCategories::class, 'update_categories_gender'])->name('categories_gender.update');
     Route::post('/destroy-categories/{id}', [ProductsCategories::class, 'destroy_categories'])->name('categories_name.destroy');
     Route::get('/auth/api/get-categories', [ProductsCategories::class, 'get_categories'])->name('product.categories');
 
