@@ -4,6 +4,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\DB\Products;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\DB\PublicProducts;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
@@ -71,6 +72,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/public_products', [PublicProducts::class, 'index'])->name('public_products');
+Route::get('/public_products/gallery/{id}', [PublicProducts::class, 'product_gallery'])->name('public_products.gallery');
+
 
 require __DIR__.'/auth.php';
 require __DIR__.'/api.php';

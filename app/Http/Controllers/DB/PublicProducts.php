@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\DB;
 
+use Inertia\Inertia;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Models\ProductsCategories;
@@ -102,4 +103,13 @@ class PublicProducts extends Controller
         )->get();
         return response()->json($items);
     }
+
+    // public function public_gallery($id){
+
+    //     $item = Products::
+
+    //     return Inertia::render('Products/Gallery/Page', [
+    //         'item' => $item
+    //     ]);
+    // }
 }

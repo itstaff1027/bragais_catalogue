@@ -11,7 +11,7 @@ import SizesDropDown  from '@/Components/Attributes/SizesDropDown';
 import HeelHeights from '@/Components/Attributes/HeelHeightsDropDown';
 import Categories from '@/Components/Attributes/CategoriesDropDown';
 import RadioButtonStatus from '@/Components/Attributes/RadioButtonStatus';
-import ImageUploader from '@/Components/Image';
+import ImageUploader from '@/Components/Image'; 
 
 export default function EditProductPage({ items }){
     const { data, setData, post, processing, errors, reset, isDirty } = useForm({
@@ -36,6 +36,9 @@ export default function EditProductPage({ items }){
     const [selectedHeelHeights, setSelectedHeelHeights] = useState([]);
     const [sizeOptions, setSizeOptions] = useState([]);
     const [selectedSizes, setSelectedSizes] = useState([]);
+    const [orderTypesOptions, setOrderTypesOptions] = useState([]);
+    const [selectedOrderTypes, setSelectedOrderTypes] = useState('');
+    const [isHidden, setIsHidden] = useState(true);
 
     const submit = (e) =>  {
         e.preventDefault();
@@ -209,6 +212,32 @@ export default function EditProductPage({ items }){
         }
     }
 
+    const updateColorOrderType = (order_type_id) => {
+        if (confirm('Are you sure you want to change the Order Type of this Product-Color?')) {
+            // Proceed with the POST request if the user confirms
+            router.post(route('update_product_color.order_type'), { order_type_id: order_type_id, item: selectedOrderTypes }, {
+                onSuccess: (page) => {
+                    setIsHidden(true);
+                    getSelectedColors();
+                },
+                onError: (error) => {
+                    console.error('An error occurred:', error); // Handle error
+                },
+                preserveScroll: true,
+            });
+        } else {
+            // If the user cancels, you can add any logic here if needed
+            console.log('Action canceled by user');
+        }
+    }
+
+    const colorOrderTypeModal = (item) => {
+        setSelectedOrderTypes(item);
+        getSelectedColors();
+        getOrderTypesOptions();
+        setIsHidden(false);
+    }
+
     const [inputs, setInputs] = useState([
         { id: 1, value: '' },
         { id: 2, value: '' },
@@ -282,6 +311,19 @@ export default function EditProductPage({ items }){
         }
     }
 
+    const getOrderTypesOptions = async () => {
+        try {
+            const response = await fetch(route("product.order_types"), {
+                headers: { "Content-Type": "application/json" },
+            });
+            const data = await response.json();
+            console.log(data);
+            setOrderTypesOptions(data); // Set the available color options
+        } catch (error) {
+            console.error("Error fetching colors:", error);
+        }
+    }
+
     const getSelectionColors = async () => {
         try {
             const response = await fetch(route("product.colors"), {
@@ -313,7 +355,6 @@ export default function EditProductPage({ items }){
             }
       
             const data = await response.json(); // Only try to parse JSON if the response is OK
-            // // console.log(data);
             // const selectedColor = data.map((selected) => ({"id": selected.id, "color": selected.color}))
             setSeslectedColors(data); // Set the available color options
         } catch (error) {
@@ -512,10 +553,19 @@ export default function EditProductPage({ items }){
                     <InputError message={errors.status} className="mt-2" />
                     <hr />
                     <InputLabel htmlFor="colors" value="Colors" />
+                    <div className="w-full relative">
+                        <ColorsCheckBox.OrderTypes
+                            className={` p-4 ${isHidden ? 'hidden' : 'flex flex-col'}`}
+                            filteredOptions={orderTypesOptions}
+                            selectedOrderTypes={selectedOrderTypes}
+                            handleSelectedOrderTypes={(orderType) => updateColorOrderType(orderType)}
+                        />
+                    </div>
                     <div className="p-4">
                         <ColorsCheckBox.EditColors 
                             handleSelectedColor={(color) => addColor(color)} 
                             handleRemoveColor={(removeProductColor) => removeColor(removeProductColor)}
+                            handleUpdateOrderTypes={(colorOrderType) => colorOrderTypeModal(colorOrderType)}
                             // colors={data.color_id}
                             product_id={items.id}
                             fetchSelectedColors={getSelectedColors}

@@ -59,7 +59,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
 
                 
             
-                <div className="gallery_container border p-8 ">
+                <div className="gallery_container p-8 ">
                     <div className="rounded-xl shadow-xl shadow-slate-600/100 m-4">
                        
                     </div>

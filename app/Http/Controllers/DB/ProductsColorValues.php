@@ -29,12 +29,14 @@ class ProductsColorValues extends Controller
         // return response()->json($product_with_color);
         $color = ModelsProductsColorValues::where("product_id", "=", $id)
             ->leftJoin('products_colors', 'products_colors.id', '=', 'products_color_values.color_id')
+            ->leftJoin('order_types', 'order_types.id', '=', 'products_color_values.order_type_id')
             ->select(
                 'products_color_values.id', 
                     'products_color_values.product_id', 
                     'products_color_values.color_id', 
-                    'products_color_values.order_type_id', 
-                    'products_colors.color'
+                    'products_color_values.order_type_id',
+                    'order_types.name',
+                    'products_colors.color',
                 )
             ->get(); // Select relevant columns;
         return response()->json($color);
@@ -69,6 +71,23 @@ class ProductsColorValues extends Controller
 
         if($color){
             $color->delete();
+            return redirect()->back()->with('success', 'Successfully Deleted!');
+        }
+        else{
+            return redirect()->back()->with('error', 'Cannot Find the Color!');
+        }
+    }
+
+    // public function get_selected_order_type(Request $request){
+    //     $orderType = ModelsProductsColorValues
+    // }
+    
+    public function update_color_product_order_types(Request $request){
+        // dd($request);
+        $color = ModelsProductsColorValues::findOrFail($request->item['id']);
+        // dd($color);
+        if($color){
+            $color->update(['order_type_id' => $request->order_type_id]);
             return redirect()->back()->with('success', 'Successfully Deleted!');
         }
         else{

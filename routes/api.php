@@ -14,7 +14,7 @@ use App\Http\Controllers\DB\ProductsHeelHeightValues;
 use App\Http\Controllers\DB\ProductSizeValueIds;
 use App\Http\Controllers\ImageUploader;
 
-Route::get('/public_products', [PublicProducts::class, 'index'])->name('public_products'); 
+
 Route::get('/public_products/{id}', [PublicProducts::class, 'show']); 
 Route::get('/public/get-categories', [PublicProducts::class, 'get_categories'])->name('public-product.categories');
 
@@ -93,6 +93,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/update-order_types/{id}', [OrderTypes::class, 'update_order_types'])->name('order_types_name.update');
     Route::post('/destroy-order_types/{id}', [OrderTypes::class, 'destroy_order_types'])->name('order_types_name.destroy');
     Route::get('/auth/api/get-order_types', [OrderTypes::class, 'index'])->name('product.order_types');
+
+    // Route::get('/product_color_selected_order_type', [ProductsColorValues::class, 'get_selected_order_type'])->name('colors.order_type');
+    Route::post('/update-product_color_order_types', [ProductsColorValues::class, 'update_color_product_order_types'])->name('update_product_color.order_type');
 });
 
 // Add Products and its components
