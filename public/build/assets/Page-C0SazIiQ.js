@@ -1,0 +1,1 @@
+import{j as o}from"./app-DlddDHRF.js";import"./Dropdown-AU8bS9M5.js";import"./AuthenticatedLayout-DNKB0hr8.js";import{T as r}from"./ToolsLayout-BxhfKqXV.js";import"./transition-Dqu5RDwA.js";import"./ApplicationLogo-CHOwe7hl.js";function l({params:t}){return o.jsx(r,{children:"Tools"})}export{l as default};
