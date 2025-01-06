@@ -19,4 +19,14 @@ class ProductsCategories extends Model
         'categories',
         'gender'
     ];
+
+    public function products()
+    {
+        return $this->belongsToMany(
+            Products::class,
+            'products_category_values',  // Pivot table
+            'category_id',               // Foreign key in pivot table for ProductsCategories
+            'product_id'                 // Foreign key in pivot table for Products
+        );
+    }
 }

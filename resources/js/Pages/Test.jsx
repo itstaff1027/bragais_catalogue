@@ -4,7 +4,7 @@ import Gallery from '@/Pages/Gallery/Page';
 import HowToOrder from '@/Pages/Footer/HowToOrder';
 import PublicLayout from '@/Layouts/PublicLayout';
 
-export default function Welcome({ laravelVersion, phpVersion }) {
+export default function Test({ laravelVersion, phpVersion }) {
     const handleImageError = () => {
         document
             .getElementById('screenshot-container')
@@ -32,7 +32,7 @@ export default function Welcome({ laravelVersion, phpVersion }) {
                 </div>
 
                 <div className=" w-full p-8 h-auto">
-                    <Gallery />
+                    {/* <Gallery /> */}
                 </div>
 
                 

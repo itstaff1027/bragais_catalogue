@@ -74,7 +74,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/public_products', [PublicProducts::class, 'index'])->name('public_products');
-Route::get('/public_products/gallery/{id}', [PublicProducts::class, 'product_gallery'])->name('public_products.gallery');
+Route::middleware(['web'])->group(function () {
+    Route::get('/public_products/gallery/{id}', [PublicProducts::class, 'public_gallery'])->name('public_products.gallery');
+});
 
 
 require __DIR__.'/auth.php';

@@ -18,4 +18,10 @@ class OrderTypes extends Model
         protected $fillable = [
             'name',
         ];
+
+        // Define the relationship with colors
+    public function colors()
+    {
+        return $this->hasMany(ProductsColors::class);
+    }
 }

@@ -111,7 +111,7 @@ export default function Gallery(){
 
                   <div className="flex justify-between w-full p-4">
                     <div>{item.model}</div>
-                    <Link href={`${item.page_path}`}>View More</Link>
+                    <Link href={route('public_products.gallery', item.id)}>View More</Link>
                   </div>
                 </div>
               );
