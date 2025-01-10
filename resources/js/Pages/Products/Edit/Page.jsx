@@ -20,7 +20,7 @@ export default function EditProductPage({ items }){
         status: items.status,
         size_id: items.size_id,
         category_id: items.category_id,
-        image: null,
+        image: [],
         folder: 'local_images'
     });
 
@@ -28,7 +28,7 @@ export default function EditProductPage({ items }){
 
     const [model, setModel] = useState(items.model);
 
-    const [preview, setPreview] = useState(null); // State to store preview URL
+    const [previews, setPreviews] = useState([]); // State to store preview URL
     const [images, setImages] = useState([]);
     const [filteredOptions, setFilteredOptions] = useState([]);
     const [selectedColors, setSeslectedColors] = useState([]);
@@ -447,16 +447,34 @@ export default function EditProductPage({ items }){
 
     
     const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        setData('image', event.target.files[0]);
-        if (file) {
-            // Check if the file is an image
-            if (file.type.startsWith("image/")) {
-                setPreview(URL.createObjectURL(file)); // Generate preview URL
-            } else {
-                alert("Please select a valid image file.");
-            }
-        }
+        const files = Array.from(event.target.files); // Convert FileList to an array
+        const validFiles = files.filter((file) => file.type.startsWith("image/")); // Filter for images
+
+        // Map files to objects containing both the file and its preview URL
+        const newImages = validFiles.map((file) => ({
+            file,
+            preview: URL.createObjectURL(file), // Generate preview URL
+        }));
+
+        setPreviews((prevImages) => [...prevImages, ...newImages]);
+
+        // Update data for submission
+        setData('image', validFiles);
+    };
+
+    const handleRemoveImage = (index) => {
+        setPreviews((prevImages) => {
+            // Clean up the preview URL to prevent memory leaks
+            URL.revokeObjectURL(prevImages[index].preview);
+    
+            // Create the updated previews array
+            const updatedImages = prevImages.filter((_, i) => i !== index);
+    
+            // Update the data for submission by removing the corresponding file
+            setData('image', updatedImages.map((item) => item.file));
+    
+            return updatedImages;
+        });
     };
 
     const handleUpload = () => {
@@ -471,6 +489,8 @@ export default function EditProductPage({ items }){
                 console.error('An error occurred:', error); // Handle error
             },
             onFinish: () => {
+                reset();
+                setPreviews([]);
                 fetchImages();
             },
             
@@ -499,7 +519,16 @@ export default function EditProductPage({ items }){
         >
             
             <div className="flex flex-col justify-center w-full">
-            <ImageUploader handleFileChange={handleFileChange} handleUpload={handleUpload} preview={preview} product_id={items.id} />
+            <ImageUploader 
+                previewStyle={"h-72 w-72"}
+                handleFileChange={handleFileChange} 
+                handleUpload={handleUpload} 
+                handleRemoveImage={handleRemoveImage} 
+                previews={previews} 
+                product_id={items.id} 
+                inputName={"image"}
+            />
+            <InputError message={errors.image} className="mt-2" />
                 {images.length > 0 ? (
                     <div className="flex flex-col w-full p-4">
                         <div  className="flex w-full p-4 overflow-auto">

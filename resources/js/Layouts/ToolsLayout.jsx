@@ -39,6 +39,11 @@ export default function ToolsLayout({ header, children }) {
             'id': '5',
             'name': 'Order Types',
             'route': 'create-order-types'
+        },
+        {
+            'id': '6',
+            'name': 'Page Sections',
+            'route': 'page_sections'
         }
         
     ];
@@ -57,7 +62,7 @@ export default function ToolsLayout({ header, children }) {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <div className="flex w-1/2 p-4 justify-between">
+                            <div className="flex w-full p-4 justify-between">
                                 {paths.map((path, i) => (
                                     <div>
                                         <ResponsiveNavLink 

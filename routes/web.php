@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Pages\Tools\ToolsIndexController;
+use App\Http\Controllers\Tools\ToolsController;
 use Inertia\Inertia;
 use App\Http\Controllers\DB\Products;
 use Illuminate\Support\Facades\Route;
@@ -34,9 +36,7 @@ Route::get('/users', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::get('/tools', function () {
-        return Inertia::render('Tools/Page');
-    })->name('tools');
+    Route::get('/tools', [ToolsIndexController::class, 'index'])->name('tools');
 
     Route::get('/tools/create-colors', function () {
         return Inertia::render('Tools/Attributes/Colors/Page');
@@ -57,6 +57,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/tools/create-order-types', function () {
         return Inertia::render('Tools/Attributes/OrderTypes/Page');
     })->name('create-order-types');
+
+    Route::get('/tools/create-page-sections', [ToolsController::class, 'index'])->name('page_sections');
 });
 
 

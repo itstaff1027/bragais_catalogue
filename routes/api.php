@@ -13,7 +13,7 @@ use App\Http\Controllers\DB\ProductsColorValues;
 use App\Http\Controllers\DB\ProductsHeelHeightValues;
 use App\Http\Controllers\DB\ProductSizeValueIds;
 use App\Http\Controllers\ImageUploader;
-
+use App\Http\Controllers\Tools\ToolsController;
 
 Route::get('/public_products/{id}', [PublicProducts::class, 'show']); 
 Route::get('/public/get-categories', [PublicProducts::class, 'get_categories'])->name('public-product.categories');
@@ -21,6 +21,9 @@ Route::get('/public/get-categories', [PublicProducts::class, 'get_categories'])-
 Route::get('/auth/api/products', [Products::class, 'index'])->middleware(['auth', 'verified']);   
 
 Route::post('/upload-image', [ImageUploader::class, 'upload'])->middleware(['auth', 'verified'])->name('upload.image');
+Route::post('/upload-image-section', [ImageUploader::class, 'upload_image_section'])->middleware(['auth', 'verified'])->name('upload.image_section');
+Route::post('/update-image-section', [ImageUploader::class, 'update_image_section'])->middleware(['auth', 'verified'])->name('upload.updated_image_section');
+Route::post('/destroy-image-scrollable', [ImageUploader::class, 'destroy_image_scrollable'])->middleware(['auth', 'verified'])->name('destroy.image_section');
 
 // Color
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -96,6 +99,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Route::get('/product_color_selected_order_type', [ProductsColorValues::class, 'get_selected_order_type'])->name('colors.order_type');
     Route::post('/update-product_color_order_types', [ProductsColorValues::class, 'update_color_product_order_types'])->name('update_product_color.order_type');
+});
+
+// Page Sections
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/create-page_sections', [ToolsController::class, 'create_page_sections'])->name('page_sections_name.create');
+    Route::post('/update-page_sections/{id}', [ToolsController::class, 'update_page_sections'])->name('page_sections_name.update');
+    Route::post('/destroy-page_sections/{id}', [ToolsController::class, 'destroy_page_sections'])->name('page_sections_name.destroy');
 });
 
 // Add Products and its components
